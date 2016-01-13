@@ -33,9 +33,10 @@ def readCSV():
         if row != []:
             list.append(row)
     fic.close()
-    dataN = np.array(list, dtype = int)
+    dataN = np.array(list, dtype = str)
     for i in dataN[:,1]:
-        listInputs.append(i)
+        if i != '':
+            listInputs.append(i)
     return listInputs
 
 def readTAS(rank):
