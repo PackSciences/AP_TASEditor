@@ -51,10 +51,16 @@ def readTAS(rank):
 def FromTASToExcel(rank = 100000):
     l = readTAS(rank)
     writeToCSV(l)
+    print('Now exporting from TAS to Excel until frame number ' + str(rank))
 
+def FromTTE():
+    global ranking
+    FromTASToExcel(ranking)
+    
 def FromExceltoTAS():
     l = readCSV()
     writeToTASFiles(l)
+    print("Now exporting from Excel to TAS")
 
 def SetPath():
     if Chemin_Tk.get() != '':
@@ -63,9 +69,17 @@ def SetPath():
     else:
         CheminVersData = CheminVersDataDefault
         print(CheminVersData + ' has been set as path')
-        
-Wn = Tk()
 
+def SetLimit():
+    global ranking
+    if Limite_TK.get() != '':
+        ranking = int(float(Limite_TK.get()))
+        print(str(ranking) + ' has been set as limit')
+    else:
+        print(str(ranking) + ' has been set as limit')
+    
+Wn = Tk()
+ranking = 100000
 
 CheminVersData = CheminVersDataDefault
 csv.register_dialect('excel-fr', ExcelFr())
@@ -88,8 +102,16 @@ chaine_path = Entry(cadre_path, textvariable = Chemin_Tk, width = 150)
 chaine_path.pack()
 button_path = Button(cadre_path, command = SetPath, text = 'Set path')
 button_path.pack()
+#
+Limite_TK = StringVar()
+champ_lim = Label(cadre_path, text= 'Choose your range')
+champ_lim.pack(fill = BOTH)
+chaine_lim = Entry(cadre_path, textvariable = Limite_TK, width = 7)
+chaine_lim.pack()
+button_lim = Button(cadre_path, command = SetLimit, text = 'Set limit')
+button_lim.pack()
 
-
+#
 button_expexcl = Button(cadre_buttons, command = FromExceltoTAS, text = 'Export from Excel to TAS files')
 button_expexcl.pack()
 button_exptas = Button(cadre_buttons, command = FromTASToExcel, text = 'Export from TAS to Excel files')
@@ -99,4 +121,3 @@ button_exit = Button(cadre_buttons, command = Wn.quit, text = 'Exit')
 button_exit.pack()
 Wn.mainloop()
 Wn.destroy()
-os.system("pause")
