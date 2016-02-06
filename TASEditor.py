@@ -1,12 +1,13 @@
+from tkinter import *
 import csv
 import numpy as np
+
+CheminVersDataDefault = 'C:\\Users\\Alexandre\\AppData\\Local\\AnotherPerspective_YoYo\\'
 
 class ExcelFr(csv.excel):
     
     delimiter = ";"
  
-csv.register_dialect('excel-fr', ExcelFr())
-CheminVersData = 'C:\\Users\\Alexandre\\AppData\\Local\\AnotherPerspective_YoYo_Version4\\'
 def writeToCSV(list):
     fic = open(CheminVersData + 'TASEditor.csv','w')
     with fic as f:
@@ -47,12 +48,55 @@ def readTAS(rank):
         fic.close()
     return listInputs
     
-def FromTASToExcel(rank):
+def FromTASToExcel(rank = 100000):
     l = readTAS(rank)
     writeToCSV(l)
 
 def FromExceltoTAS():
     l = readCSV()
     writeToTASFiles(l)
-    
-    
+
+def SetPath():
+    if Chemin_Tk.get() != '':
+        CheminVersData = Chemin_Tk.get()
+        print(CheminVersData + ' has been set as path')
+    else:
+        CheminVersData = CheminVersDataDefault
+        print(CheminVersData + ' has been set as path')
+        
+Wn = Tk()
+
+
+CheminVersData = CheminVersDataDefault
+csv.register_dialect('excel-fr', ExcelFr())
+
+cadre_title = Frame(Wn, width = 768, height = 576, borderwidth = 3)
+cadre_title.pack(fill = BOTH)
+cadre_path = Frame(Wn, width = 768, height = 576, borderwidth = 3)
+cadre_path.pack(fill = BOTH)
+cadre_buttons = Frame(Wn, width = 768, height = 576, borderwidth = 3)
+cadre_buttons.pack(fill = BOTH)
+
+champ_label = Label(cadre_title, text= 'Another Perspective TAS Editor by PackSciences')
+champ_label.pack(fill = BOTH)
+Chemin_Tk = StringVar()
+champ_path = Label(cadre_path, text= 'Choose your path to Another Perspective AppData folder')
+champ_path.pack(fill = BOTH)
+champ_info = Label(cadre_path, text= 'If none specified, it will be the default one')
+champ_info.pack(fill = BOTH)
+chaine_path = Entry(cadre_path, textvariable = Chemin_Tk, width = 150)
+chaine_path.pack()
+button_path = Button(cadre_path, command = SetPath, text = 'Set path')
+button_path.pack()
+
+
+button_expexcl = Button(cadre_buttons, command = FromExceltoTAS, text = 'Export from Excel to TAS files')
+button_expexcl.pack()
+button_exptas = Button(cadre_buttons, command = FromTASToExcel, text = 'Export from TAS to Excel files')
+button_exptas.pack()
+
+button_exit = Button(cadre_buttons, command = Wn.quit, text = 'Exit')
+button_exit.pack()
+Wn.mainloop()
+Wn.destroy()
+os.system("pause")
